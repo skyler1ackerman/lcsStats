@@ -33,6 +33,7 @@ def getGameName(soup):
 # Uses the soup to get the game length
 def getGameLength(soup):
 	return soup.find_all('h1')[1].text
+	
 
 def getGameDate(soup):
 	return soup.find(class_='col-12 col-sm-5 text-right').text
@@ -67,5 +68,11 @@ def getAllData(url):
 	return gameData
 
 # Write the data to the json file
-with open('data.json', 'w', indent=4) as outfile:
-	json.dump(getAllData(URL), outfile)
+# with open('data.json', 'w', indent=4) as outfile:
+# 	json.dump(getAllData(URL), outfile)
+tempUrl = 'https://gol.gg/game/stats/29003/page-game/'
+page = requests.get(tempUrl)
+gameSoup = BeautifulSoup(page.content, features="html.parser")
+for table in gameSoup.find_all(class_='playersInfosLine footable toggle-square-filled'):
+	for row in table.find_all('tr', recursive=False):
+		print(row.find('img').get('alt'))
